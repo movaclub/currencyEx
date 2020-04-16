@@ -1,5 +1,7 @@
 export interface Rates {
   base: string;
-  date: Date;
   rates: {};
+  date?: string;
+  start_at?: any;
+  and_at?: any;
 }
