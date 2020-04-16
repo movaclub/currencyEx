@@ -2,11 +2,9 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.1.
 
-* This application was generatated with following CLI options:
+This application was generatated with following CLI options:
 ``ng new --directory ./ --skipGit=true --minimal true --packageManager yarn --prefix curEx --skipInstall true``
 
-* API (https://exchangeratesapi.io/ using HTTP 1.1)
-Postman usage: turn off ``Connection: keep-alive`` header.
 
 ## Development server
 
