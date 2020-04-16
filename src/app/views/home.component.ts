@@ -19,7 +19,7 @@ export class HomeComponent implements OnInit {
   constructor( private datum: ApiService ) {}
 
   ngOnInit(): void {
-    this.datum.getDatum('EUR');
+    this.datum.getDataSets('EUR');
   }
 
 

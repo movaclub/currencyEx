@@ -25,11 +25,27 @@ export class ApiService implements OnDestroy {
       monthAgo: '',
       curBase: '',
       latestSet: null,
-      lastMonthSet: null
+      lastMonthSet: null,
+      lastDay: '',
+      lastYstrDay: '',
+      lastDaySet: null,
+      lastYstrDaySet: null,
+      initList: null,
+      chartSet: null,
+      curBaseChartSet: null,
+      topsBaseChartSet: null
     };
   }
 
-  getDatum(base:string): Datum {
+  // get data sets ready
+  getDataSets(base: string): Datum {
+    this.getDatum(base);
+    console.log('getDataSets-datum:', this.datum);
+    return this.datum;
+  }
+
+  // get initial data sets & calc date ranges
+  private getDatum(base: string): Datum {
 
     this.datum.curBase    = base;
     let rawToDay          = new Date();
@@ -43,7 +59,9 @@ export class ApiService implements OnDestroy {
 
     this.subsAPILatest = this.apiLatest
       .subscribe(
-        dat => console.log('dat:', dat),
+        dat => {
+          this.datum.latestSet = dat;
+        },
         error => console.log('api-error:', error)
       );
 
@@ -54,7 +72,9 @@ export class ApiService implements OnDestroy {
 
     this.subsAPILastMonth = this.apiLastMonth
       .subscribe(
-        dat => console.log('datLast:', dat),
+        dat => {
+          this.datum.lastMonthSet = dat;
+        },
         error => console.log('apiLast-error:', error)
       );
 
@@ -62,6 +82,7 @@ export class ApiService implements OnDestroy {
 
   }
 
+  // api queries
   private getData(params: {start?: string; end?: string; base:string}): Observable<Rates> {
     console.log('getData-params:', params);
     let curUrl = (
@@ -69,12 +90,12 @@ export class ApiService implements OnDestroy {
         `${this.apiUrl}history?start_at=${params.start}&end_at=${params.end}&base=${params.base}` :
         `${this.apiUrl}latest?base=${params.base}`
     );
-    console.log('getData-curUrl:', curUrl);
     return this.http.get<Rates>(curUrl);
   }
 
   ngOnDestroy(): void {
     this.subsAPILatest.unsubscribe();
+    this.subsAPILastMonth.unsubscribe();
   }
 
 }
