@@ -6,12 +6,14 @@ export interface Datum {
   monthAgo: string;       // last in the month's range (from lastMonthSet)
   curBase: string;        // current currency base
   latestSet: Rates;       // latest default base set
+  baseSet: any;           // currency list for select
   lastMonthSet: Rates;    // calculated from latest last month set
 
   lastDay: string;        // latest api today
   lastYstrDay: string;    // latest api yesterday
   lastDaySet: any;        // latest api today's data set
   lastYstrDaySet: any;    // latest api yesterday's data set
+  lastMonthDates: any;    // sorted array of dates (datum.lastMonthSet.rates)
 
   // page 1
   initList: any;          // start page data set, incl. 'increase/decrease'

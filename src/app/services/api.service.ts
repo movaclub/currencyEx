@@ -24,8 +24,10 @@ export class ApiService implements OnDestroy {
       yesterDay: '',
       monthAgo: '',
       curBase: '',
+      baseSet: [],
       latestSet: null,
       lastMonthSet: null,
+      lastMonthDates: [],
       lastDay: '',
       lastYstrDay: '',
       lastDaySet: null,
@@ -35,6 +37,15 @@ export class ApiService implements OnDestroy {
       curBaseChartSet: null,
       topsBaseChartSet: null
     };
+  }
+
+  // api yester-/today sets
+  getApiDays(): void {
+    this.datum.lastMonthDates = [...(Object.keys( this.datum.lastMonthSet.rates))].sort();
+    this.datum.lastDay        = this.datum.lastMonthDates[this.datum.lastMonthDates.length-1];
+    this.datum.lastYstrDay    = this.datum.lastMonthDates[this.datum.lastMonthDates.length-2];
+    this.datum.lastDaySet     = this.datum.lastMonthSet.rates[this.datum.lastDay];
+    this.datum.lastYstrDaySet = this.datum.lastMonthSet.rates[this.datum.lastYstrDay];
   }
 
   // get data sets ready
@@ -61,6 +72,8 @@ export class ApiService implements OnDestroy {
       .subscribe(
         dat => {
           this.datum.latestSet = dat;
+          this.datum.baseSet = [...(Object.keys( this.datum.latestSet.rates))];
+          this.datum.baseSet.unshift(this.datum.curBase);
         },
         error => console.log('api-error:', error)
       );
@@ -74,6 +87,7 @@ export class ApiService implements OnDestroy {
       .subscribe(
         dat => {
           this.datum.lastMonthSet = dat;
+          this.getApiDays();
         },
         error => console.log('apiLast-error:', error)
       );
