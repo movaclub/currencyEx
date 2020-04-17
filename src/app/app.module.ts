@@ -9,6 +9,7 @@ import { LastComponent } from './views/last.component';
 import { HomeComponent } from './views/home.component';
 
 import { ApiService } from "./services/api.service";
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { ApiService } from "./services/api.service";
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [ApiService],
   bootstrap: [AppComponent]

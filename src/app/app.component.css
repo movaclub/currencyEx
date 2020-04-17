@@ -24,6 +24,7 @@
     flex-direction: column;
     align-content: flex-start;
 }
+
 .nav-item {
     width: 10vw;
     margin: .3em 0;

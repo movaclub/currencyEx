@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Observable, Subscription } from "rxjs";
+import {BehaviorSubject, Observable, of, Subscription} from "rxjs";
 import { Rates } from "../interfaces/rates";
 import { Datum } from "../interfaces/datum";
 
@@ -16,6 +16,7 @@ export class ApiService implements OnDestroy {
   private subsAPILatest: Subscription;
   private apiLastMonth: Observable<Rates>;
   private subsAPILastMonth: Subscription;
+  private subjDatum: BehaviorSubject<Datum>;
 
   constructor(private http: HttpClient) {
     this.apiUrl = 'https://api.exchangeratesapi.io/';
@@ -23,7 +24,7 @@ export class ApiService implements OnDestroy {
       toDay: '',
       yesterDay: '',
       monthAgo: '',
-      curBase: '',
+      curBase: 'EUR',
       baseSet: [],
       latestSet: null,
       lastMonthSet: null,
@@ -37,7 +38,10 @@ export class ApiService implements OnDestroy {
       curBaseChartSet: null,
       topsBaseChartSet: null
     };
+    this.subjDatum = new BehaviorSubject<Datum>(this.datum);
   }
+
+
 
   // api yester-/today sets
   getApiDays(): void {
@@ -49,13 +53,15 @@ export class ApiService implements OnDestroy {
   }
 
   // get data sets ready
-  getDataSets(base: string): Datum {
-    this.getDatum(base);
-    return this.datum;
+  getDataSets(base: string): Observable<Datum> {
+    this.datum.curBase = base;
+    this.getDatum(this.datum.curBase);
+    this.subjDatum.next(this.datum);
+    return this.subjDatum.asObservable();
   }
 
   // get initial data sets & calc date ranges
-  private getDatum(base: string): Datum {
+  getDatum(base: string): void {
 
     this.datum.curBase    = base;
     let rawToDay          = new Date();
@@ -73,6 +79,7 @@ export class ApiService implements OnDestroy {
           this.datum.latestSet = dat;
           this.datum.baseSet = [...(Object.keys( this.datum.latestSet.rates))];
           this.datum.baseSet.unshift(this.datum.curBase);
+          // this.subjDatum.next(this.datum);
         },
         error => console.log('api-error:', error)
       );
@@ -87,11 +94,10 @@ export class ApiService implements OnDestroy {
         dat => {
           this.datum.lastMonthSet = dat;
           this.getApiDays();
+          this.subjDatum.next(this.datum);
         },
         error => console.log('apiLast-error:', error)
       );
-
-    return this.datum;
 
   }
 
