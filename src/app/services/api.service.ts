@@ -3,6 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import {BehaviorSubject, Observable, of, Subscription} from "rxjs";
 import { Rates } from "../interfaces/rates";
 import { Datum } from "../interfaces/datum";
+import { Chartset } from "../interfaces/chartset";
+import {Initlist} from "../interfaces/initlist";
 
 @Injectable({
   providedIn: 'root'
@@ -41,7 +43,9 @@ export class ApiService implements OnDestroy {
     this.subjDatum = new BehaviorSubject<Datum>(this.datum);
   }
 
-
+  getDataSub$(): Observable<Datum> {
+    return this.subjDatum.asObservable();
+  }
 
   // api yester-/today sets
   getApiDays(): void {
@@ -53,11 +57,11 @@ export class ApiService implements OnDestroy {
   }
 
   // get data sets ready
-  getDataSets(base: string): Observable<Datum> {
+  getDataSets(base: string): void {
     this.datum.curBase = base;
     this.getDatum(this.datum.curBase);
     this.subjDatum.next(this.datum);
-    return this.subjDatum.asObservable();
+    // return this.subjDatum.asObservable();
   }
 
   // get initial data sets & calc date ranges
@@ -79,7 +83,7 @@ export class ApiService implements OnDestroy {
           this.datum.latestSet = dat;
           this.datum.baseSet = [...(Object.keys( this.datum.latestSet.rates))];
           this.datum.baseSet.unshift(this.datum.curBase);
-          // this.subjDatum.next(this.datum);
+          this.subjDatum.next(this.datum);
         },
         error => console.log('api-error:', error)
       );
@@ -91,14 +95,40 @@ export class ApiService implements OnDestroy {
 
     this.subsAPILastMonth = this.apiLastMonth
       .subscribe(
-        dat => {
+        async dat => {
           this.datum.lastMonthSet = dat;
-          this.getApiDays();
+          await this.getApiDays();
+          this.datum.initList = await this.createInitList();
           this.subjDatum.next(this.datum);
         },
         error => console.log('apiLast-error:', error)
       );
 
+  }
+
+  createChartData( secCur: string ) {
+    this.datum.chartSet = this.createChartDataSet(secCur);
+    this.subjDatum.next(this.datum);
+  }
+
+  private createInitList(): Initlist {
+    let initList: Initlist = {dataSet: []};
+    for(let [key, value] of Object.entries(this.datum.lastDaySet)) {
+      initList.dataSet.push( {currency: key, spot: value, shift: parseFloat((+value - this.datum.lastYstrDaySet[key]).toFixed(6).toString())} );
+    }
+    return Object.assign({}, initList);
+  }
+
+  private createChartDataSet( secCur: string ): Chartset {
+    // @ts-ignore
+    let tmp: Chartset = {secCur, chartData: []};
+    for(let day of this.datum.lastMonthDates) {
+      tmp.chartData.push({
+        date: day,
+        value: this.datum.lastMonthSet.rates[day][secCur]
+      });
+    }
+    return tmp;
   }
 
   // api queries

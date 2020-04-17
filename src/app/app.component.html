@@ -6,7 +6,6 @@
       (change)="onOptionSelected()"
       [(ngModel)]="selectedCurrency">
       <option *ngFor="let cur of baseSet;"
-              [selected]="selectedCurrency"
               [value]="cur">{{cur}}</option>
     </select>
   </div>
@@ -21,7 +20,7 @@
 
     </div>
 
-    <div class="content">
+    <div class="content" (click)="onClickChart('USD')">
       <router-outlet></router-outlet>
     </div>
 

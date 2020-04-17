@@ -1,10 +1,10 @@
 export interface Initlist {
 
-  base: string; // current/default base
+  // base: string; // current/default base
 
-  dataSet: {currency: string; spot: number; shift: number}[];
+  dataSet: {currency: string; spot: any; shift: any}[];
   // currency, spot - lastDate value, shift: lastDay-lastYstrDay
 
-  baseSet: string[]; // Base selector set
+  // baseSet: string[]; // Base selector set
   
 }

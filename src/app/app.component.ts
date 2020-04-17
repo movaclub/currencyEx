@@ -17,12 +17,12 @@ export class AppComponent implements OnInit{
   selectedCurrency: any;
 
   constructor(private api: ApiService) {
-    this.curBase = 'USD';
+    this.curBase = 'EUR';
   }
 
   ngOnInit(): void {
-    this.api.getDataSets(this.curBase)
-      .subscribe(
+    this.api.getDataSets(this.curBase);
+    this.api.getDataSub$().subscribe(
         rez => {
           this.datum = rez;
           this.baseSet = rez.baseSet;
@@ -37,16 +37,11 @@ export class AppComponent implements OnInit{
   onOptionSelected(): void {
     console.log('onOptionSelected-selectedCurrency: ', this.selectedCurrency);
     this.curBase = this.selectedCurrency;
-    this.api.getDataSets(this.selectedCurrency)
-      .subscribe(
-        rez => {
-          this.datum = rez;
-          this.baseSet = rez.baseSet;
-          this.selectedCurrency = this.baseSet[0];
-          console.log('onOptionSelected-datum: ', this.datum);
-        },
-        error => console.log(error)
-      );
+    this.api.getDataSets(this.curBase);
+  }
+
+  onClickChart( secCur: string ) {
+    this.api.createChartData( secCur );
   }
 
 
