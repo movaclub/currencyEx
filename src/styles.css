@@ -3,6 +3,7 @@ body {
     max-width: 88vw;
     margin: 0 auto;
     box-sizing: border-box;
+    font-family: Consolas, Verdana;
 }
 
 :root {
@@ -37,16 +38,17 @@ a:hover { cursor: pointer; }
     min-width: 50vw;
     display: flex;
     align-content: space-evenly;
-    border-bottom: 1px solid rgba(57, 83, 164, .33);
+    color: rgba(57, 83, 164, .77);
+    padding: 1em 1em;
 }
 
 .area {
     grid-area: area;
-    min-width: 80vw;
-    padding: 22px;
-    display: flex;
-    flex-flow: column;
-    align-content: center;
+    /*min-width: 50vw;*/
+    /*padding: 22px;*/
+    /*display: flex;*/
+    /*flex-flow: column;*/
+    /*align-content: center;*/
 }
 
 .footer {

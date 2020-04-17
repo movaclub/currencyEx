@@ -1,8 +1,5 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import { Observable, Subscription } from "rxjs";
+import { Component, OnInit } from '@angular/core';
 import { ApiService } from "../services/api.service";
-import { Rates } from '../interfaces/rates';
-import {Data} from "@angular/router";
 
 @Component({
   selector: 'curEx-home',
@@ -11,15 +8,14 @@ import {Data} from "@angular/router";
 })
 export class HomeComponent implements OnInit {
 
-  public latestDate: string; // api->latest.date
-  public yesterdayDate: string; // api->oneMonth[1].date, next to latest
-  public monthAgo: string;
   public curBase: string;
 
-  constructor( private datum: ApiService ) {}
+  constructor( private datum: ApiService ) {
+    this.curBase        = 'EUR';
+  }
 
   ngOnInit(): void {
-    this.datum.getDataSets('EUR');
+    // this.datum.getDataSets(this.curBase);
   }
 
 

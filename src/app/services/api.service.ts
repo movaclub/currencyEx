@@ -51,7 +51,6 @@ export class ApiService implements OnDestroy {
   // get data sets ready
   getDataSets(base: string): Datum {
     this.getDatum(base);
-    console.log('getDataSets-datum:', this.datum);
     return this.datum;
   }
 
@@ -98,7 +97,7 @@ export class ApiService implements OnDestroy {
 
   // api queries
   private getData(params: {start?: string; end?: string; base:string}): Observable<Rates> {
-    console.log('getData-params:', params);
+    // console.log('getData-params:', params);
     let curUrl = (
       'start' in params && 'end' in params ?
         `${this.apiUrl}history?start_at=${params.start}&end_at=${params.end}&base=${params.base}` :

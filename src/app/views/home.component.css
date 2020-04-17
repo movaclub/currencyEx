@@ -1,0 +1,35 @@
+
+.currency-table {
+    width: 55vw;
+    height: inherit;
+    margin: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(4vh, auto);
+    grid-gap: .001em;
+    font-family: Consolas, Verdana;
+}
+
+.currency-table-header {
+    min-height: 6vh;
+    flex: 1 0 0;
+    background-color: lightgreen;
+    color: snow;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.currency-table-item {
+    flex: 1 0 0;
+    margin: .1em .1em;
+    min-height: 4vh;
+    color: darkgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: cornsilk;
+    font-weight: 100;
+    font-size: .92em;
+}

@@ -1,0 +1,39 @@
+.page-layout {
+    width: 80vw;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    justify-content: center;
+}
+
+.base {
+    flex: 1 0 0;
+    align-self: flex-end;
+    padding-right: 1.5em;
+}
+
+.page-area {
+    display: inline-flex;
+    flex-direction: row;
+}
+
+.nav {
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+}
+.nav-item {
+    width: 10vw;
+    margin: .3em 0;
+    justify-content: center;
+    color: red;
+    font-size: .87rem;
+    border-radius: .44em;
+}
+
+.content {
+    flex: 9 0 0;
+}
+
