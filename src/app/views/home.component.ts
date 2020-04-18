@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ApiService } from "../services/api.service";
+import { Datum } from "../interfaces/datum";
 
 @Component({
   selector: 'curEx-home',
@@ -9,13 +10,21 @@ import { ApiService } from "../services/api.service";
 export class HomeComponent implements OnInit {
 
   public curBase: string;
+  public datum: Datum;
 
-  constructor( private datum: ApiService ) {
+  constructor( private api: ApiService ) {
     this.curBase        = 'EUR';
   }
 
   ngOnInit(): void {
-    // this.datum.getDataSets(this.curBase);
+    this.api.getDataSets(this.curBase);
+    this.api.getDataSub$().subscribe(
+      rez => {
+        this.datum = rez;
+        console.log('INITLIST: ', this.datum.initList);
+      },
+      error => console.log(error)
+    );
   }
 
 

@@ -12,7 +12,7 @@ import {Observable} from "rxjs";
 export class AppComponent implements OnInit{
 
   public curBase: string;
-  public baseSet: any;
+  public baseSet: string[];
   public datum: Datum;
   selectedCurrency: any;
 
@@ -27,7 +27,6 @@ export class AppComponent implements OnInit{
           this.datum = rez;
           this.baseSet = rez.baseSet;
           this.selectedCurrency = this.baseSet[0];
-          console.log('ngOnInit-datum: ', this.datum);
         },
         error => console.log(error)
       );
