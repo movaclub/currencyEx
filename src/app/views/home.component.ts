@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   public curBase: string;
   public datum: Datum;
 
-  constructor( private api: ApiService ) {
+  constructor( private api: ApiService) {
     this.curBase        = 'EUR';
   }
 
@@ -21,11 +21,11 @@ export class HomeComponent implements OnInit {
     this.api.getDataSub$().subscribe(
       rez => {
         this.datum = rez;
-        console.log('INITLIST: ', this.datum.initList);
+        // console.log('INITLIST: ', this.datum.initList);
+        // console.log('CHARTSET: ', this.datum.chartSet);
       },
       error => console.log(error)
     );
   }
-
 
 }

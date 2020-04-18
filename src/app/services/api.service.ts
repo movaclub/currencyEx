@@ -121,12 +121,14 @@ export class ApiService implements OnDestroy {
 
   private createChartDataSet( secCur: string ): Chartset {
     // @ts-ignore
-    let tmp: Chartset = {secCur, chartData: []};
+    let tmp: Chartset = {secCur, labels: [], dataSet: []};
     for(let day of this.datum.lastMonthDates) {
-      tmp.chartData.push({
-        date: day,
-        value: this.datum.lastMonthSet.rates[day][secCur]
-      });
+      tmp.labels.push(day);
+      tmp.dataSet.push(this.datum.lastMonthSet.rates[day][secCur].toString());
+      // tmp.chartData.push({
+      //   date: day,
+      //   y: this.datum.lastMonthSet.rates[day][secCur]
+      // });
     }
     return tmp;
   }

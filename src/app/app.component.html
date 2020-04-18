@@ -14,13 +14,13 @@
 
     <div class="nav">
 
-      <button class="nav-item">Latest rates</button>
-      <button class="nav-item">Last 30 days</button>
-      <button class="nav-item">TOP 5</button>
+      <button routerLink="/home" class="nav-item">Latest rates</button>
+      <button routerLink="/last" class="nav-item">Last 30 days</button>
+      <button routerLink="/tops" class="nav-item">TOP 5</button>
 
     </div>
 
-    <div class="content" (click)="onClickChart('USD')">
+    <div class="content">
       <router-outlet></router-outlet>
     </div>
 

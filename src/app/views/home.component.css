@@ -1,10 +1,8 @@
 .currency-table {
     width: 55vw;
-    height: inherit;
     margin: auto;
-    font-family: Consolas, Verdana;
     overflow-x: auto;
-    height: 69vh;
+    height: 75vh;
     min-height: 69vh;
 }
 .currency-table-item-row {
@@ -57,19 +55,19 @@
 
 /* Track */
 ::-webkit-scrollbar-track {
-    background: rgba(237, 32, 36, .11);
+    background: rgba(0, 100, 0, .11);
     border-radius: 9px;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-    background: rgba(237, 32, 36, .33);
+    background: rgba(0, 100, 0, .33);
     border-radius: 9px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-    background: rgba(237, 32, 36, .69);
+    background: rgba(0, 100, 0, .69);
     border-radius: 9px;
 }
 
