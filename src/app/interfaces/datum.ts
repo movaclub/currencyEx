@@ -20,7 +20,7 @@ export interface Datum {
   chartSet: any;          // chart column data set: base<->one currency picked
 
   // page 2
-  curBaseChartSet: any;   // chart for base for 30 days
+  // curBaseChartSet: any;   // chart for base for 30 days (see 'chartSet' for page 1)
 
   // page 3
   topsBaseChartSet: any;  // top 5 to base chart set today-yesterday

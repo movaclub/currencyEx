@@ -1,6 +1,6 @@
 import {Injectable, OnDestroy} from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import {BehaviorSubject, Observable, of, Subscription} from "rxjs";
+import {BehaviorSubject, EMPTY, Observable, of, Subscription} from "rxjs";
 import { Rates } from "../interfaces/rates";
 import { Datum } from "../interfaces/datum";
 import { Chartset } from "../interfaces/chartset";
@@ -33,12 +33,12 @@ export class ApiService implements OnDestroy {
       lastMonthDates: [],
       lastDay: '',
       lastYstrDay: '',
-      lastDaySet: null,
+      lastDaySet: [],
       lastYstrDaySet: null,
       initList: null,
       chartSet: null,
-      curBaseChartSet: null,
-      topsBaseChartSet: null
+      // curBaseChartSet: [],
+      topsBaseChartSet: []
     };
     this.subjDatum = new BehaviorSubject<Datum>(this.datum);
   }
@@ -52,12 +52,24 @@ export class ApiService implements OnDestroy {
     this.datum.lastMonthDates = [...(Object.keys( this.datum.lastMonthSet.rates))].sort();
     this.datum.lastDay        = this.datum.lastMonthDates[this.datum.lastMonthDates.length-1];
     this.datum.lastYstrDay    = this.datum.lastMonthDates[this.datum.lastMonthDates.length-2];
-    this.datum.lastDaySet     = this.datum.lastMonthSet.rates[this.datum.lastDay];
+
+    // const lastDayCurSorted    = [...(Object.keys(this.datum.lastMonthSet.rates[this.datum.lastDay]))].sort();
+    // console.log('lastDayCurSorted:',  lastDayCurSorted);
+    console.log('DATUM:',  this.datum);
+    // console.log('LASTMONTHSET:',  this.datum.lastMonthSet.rates[this.datum.lastDay]);
+    for ( const [cur, num] of Object.entries(this.datum.lastMonthSet.rates[this.datum.lastDay]) ) {
+      // console.log(cur, num);
+      // console.log('indexOf(cur): ', this.datum.baseSet.indexOf(cur));
+      this.datum.lastDaySet[this.datum.baseSet.indexOf(cur)] = {currency: cur, price: num};
+      // this.datum.lastDaySet = this.datum.lastDaySet.filter( el => el != null);
+    }
+    // this.datum.lastDaySet     = this.datum.lastMonthSet.rates[this.datum.lastDay];
     this.datum.lastYstrDaySet = this.datum.lastMonthSet.rates[this.datum.lastYstrDay];
+    // console.log('LASTDAYSET:',  this.datum.lastDaySet);
   }
 
   // get data sets ready
-  getDataSets(base: string): void {
+  getDataSets(base: string = 'EUR'): void {
     this.datum.curBase = base;
     this.getDatum(this.datum.curBase);
     this.subjDatum.next(this.datum);
@@ -75,21 +87,21 @@ export class ApiService implements OnDestroy {
     this.datum.yesterDay  = rawYesterDay.toISOString().split('T')[0];
     this.datum.monthAgo   = rawMonthAgo.toISOString().split('T')[0];
 
-    this.apiLatest = this.getData({base: this.datum.curBase});
+    this.apiLatest = this.getData({base: this.datum.curBase || base});
 
     this.subsAPILatest = this.apiLatest
       .subscribe(
         dat => {
           this.datum.latestSet = dat;
-          this.datum.baseSet = [...(Object.keys( this.datum.latestSet.rates))];
-          this.datum.baseSet.unshift(this.datum.curBase);
+          this.datum.baseSet = [...(Object.keys( this.datum.latestSet.rates))].sort();
+          // this.datum.baseSet.unshift(this.datum.curBase);
           this.subjDatum.next(this.datum);
         },
         error => console.log('api-error:', error)
       );
 
     this.apiLastMonth = this.getData({
-      base: this.datum.curBase,
+      base: this.datum.curBase || base,
       start: this.datum.monthAgo,
       end: this.datum.toDay});
 
@@ -106,42 +118,45 @@ export class ApiService implements OnDestroy {
 
   }
 
-  createChartData( secCur: string ) {
+  // (1) picked currency chart icon click (app.comp)
+  // (2) 'Last 30 days' button click, if no base currency changed (different from 'EUR')
+  // default is used - 'AUD'
+  createChartData( secCur: string = 'AUD' ): void {
     this.datum.chartSet = this.createChartDataSet(secCur);
     this.subjDatum.next(this.datum);
   }
 
   private createInitList(): Initlist {
     let initList: Initlist = {dataSet: []};
-    for(let [key, value] of Object.entries(this.datum.lastDaySet)) {
-      initList.dataSet.push( {currency: key, spot: value, shift: parseFloat((+value - this.datum.lastYstrDaySet[key]).toFixed(6).toString())} );
+    for ( let el of this.datum.lastDaySet ) {
+      initList.dataSet.push( {currency: el.currency, spot: el.price, shift: parseFloat((+el.price - this.datum.lastYstrDaySet[el.currency]).toFixed(6).toString())} );
     }
     return Object.assign({}, initList);
   }
 
   private createChartDataSet( secCur: string ): Chartset {
     // @ts-ignore
-    let tmp: Chartset = {secCur, labels: [], dataSet: []};
+    const chartSet: Chartset = {secCur, labels: [], dataSet: []};
     for(let day of this.datum.lastMonthDates) {
-      tmp.labels.push(day);
-      tmp.dataSet.push(this.datum.lastMonthSet.rates[day][secCur].toString());
-      // tmp.chartData.push({
-      //   date: day,
-      //   y: this.datum.lastMonthSet.rates[day][secCur]
-      // });
+      chartSet.labels.push(day);
+      chartSet.dataSet.push(this.datum.lastMonthSet.rates[day][secCur].toString());
     }
-    return tmp;
+    return chartSet;
   }
 
   // api queries
   private getData(params: {start?: string; end?: string; base:string}): Observable<Rates> {
     // console.log('getData-params:', params);
-    let curUrl = (
-      'start' in params && 'end' in params ?
-        `${this.apiUrl}history?start_at=${params.start}&end_at=${params.end}&base=${params.base}` :
-        `${this.apiUrl}latest?base=${params.base}`
-    );
-    return this.http.get<Rates>(curUrl);
+    if ( params.base ) {
+      let curUrl = (
+        'start' in params && 'end' in params ?
+          `${this.apiUrl}history?start_at=${params.start}&end_at=${params.end}&base=${params.base}` :
+          `${this.apiUrl}latest?base=${params.base}`
+      );
+      return this.http.get<Rates>(curUrl);
+    } else {
+      return EMPTY;
+    }
   }
 
   ngOnDestroy(): void {

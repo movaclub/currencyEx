@@ -7,10 +7,10 @@ import { HistComponent } from "./views/hist.component";
 
 
 const routes: Routes = [
-  {path: '', redirectTo: '/home', pathMatch: 'full'},
-  {path: 'home', component: HomeComponent},
-  {path: 'hist/:curSec', component: HistComponent},
-  {path: 'last', component: LastComponent},
+  {path: '', redirectTo: '/home/EUR', pathMatch: 'full'},
+  {path: 'home/:baseCur', component: HomeComponent}, // base currency always
+  {path: 'hist/:curSec', component: HistComponent},  // base/default currency
+  {path: 'last/:secCur', component: LastComponent},  // second currency always
   {path: 'tops', component: TopsComponent}
 ];
 
