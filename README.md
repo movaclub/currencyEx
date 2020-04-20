@@ -1,5 +1,19 @@
 # CurrencyExchange
 
+### Screenshots
+
+#### Home
+
+![Start page](https://github.com/movaclub/currencyEx/blob/master/start_page.png)
+
+#### BarChart
+
+![BarChart](https://github.com/movaclub/currencyEx/blob/master/barchart_page.png)
+
+#### Top 5 up/down sorting
+
+![Top 5](https://github.com/movaclub/currencyEx/blob/master/top5_page.png)
+
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.1.
 
 This application was generatated with following CLI options:
