@@ -1,1 +1,23 @@
-<p>tops works!</p>
+<div class="currency-bias-buttons">
+  <button class="currency-bias-btn" (click)="order='desc'">Increase</button>
+  <button class="currency-bias-btn" (click)="order='asc'">Decrease</button>
+</div>
+
+<div class="currency-table-header">
+
+  <div class="currency-table-header-item">Currency</div>
+  <div class="currency-table-header-item">Difference</div>
+  <div class="currency-table-header-item">%</div>
+
+</div>
+
+<div class="currency-table">
+
+  <div class="currency-table-item-row"
+       *ngFor="let cur of datum.initList?.dataSet | orderBy: order: 'per' | slice: 0: 5">
+    <div class="currency-table-item">{{cur['currency']}}</div>
+    <div class="currency-table-item">{{cur['shift']}}</div>
+    <div class="currency-table-item">{{cur['per']}}</div>
+  </div>
+
+</div>

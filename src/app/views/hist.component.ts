@@ -46,7 +46,7 @@ export class HistComponent implements OnInit, OnDestroy {
     this.api.getDataSub$().subscribe(
       rez => {
         this.datum = rez;
-          this.chart = new Chart('barChart', {
+        this.chart = new Chart('barChart', {
           type: this.chartType,
           options: this.options,
           data: {

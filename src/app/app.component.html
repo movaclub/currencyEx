@@ -14,10 +14,9 @@
 
     <div class="nav">
 
-      <button [routerLink]="['/home', curBase]" class="nav-item">Latest rates</button>
-      <button [routerLink]="['/last', last30Base]" class="nav-item">Last 30 days</button>
+      <button [routerLink]="['/home', 'EUR']" class="nav-item">Latest rates</button>
+      <button [routerLink]="['/hist', last30Base]" class="nav-item">Last 30 days</button>
       <button routerLink="/tops" class="nav-item">TOP 5</button>
-      <small>selected: {{selectedCurrency}}</small>
 
     </div>
 

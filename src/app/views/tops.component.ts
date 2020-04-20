@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import {Datum} from "../interfaces/datum";
+import {ApiService} from "../services/api.service";
 
 @Component({
   selector: 'curEx-tops',
@@ -7,9 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TopsComponent implements OnInit {
 
-  constructor() { }
+  public curBase: string;
+  public datum: Datum;
+  public order: string;
+
+  constructor( private api: ApiService ) {
+    this.curBase  = 'EUR';
+    this.order    = 'asc';
+  }
 
   ngOnInit(): void {
+    this.api.getDataSets(this.curBase);
+    this.api.getDataSub$().subscribe(
+      rez => {
+        this.datum = rez;
+      },
+      error => console.log(error)
+    );
   }
 
 }

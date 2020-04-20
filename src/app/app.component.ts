@@ -30,11 +30,12 @@ export class AppComponent implements OnInit{
   ngOnInit(): void {
     this.subApi = this.aroute.params.subscribe(
       params => {
-        if( this.curBase !== params['curSec'] ) {
+        if( this.curBase !== params['curSec'] && params['curSec'] ) {
           this.curBase = params['curSec'];
-          this.api.getDataSets(this.curBase);
-          this.last30Base = (this.curBase === 'EUR' ? 'AUD' : this.curBase);
+        } else {
+          this.curBase = 'EUR';
         }
+        this.api.getDataSets(this.curBase);
         this.getCurDataSet();
       }
     );
@@ -47,19 +48,20 @@ export class AppComponent implements OnInit{
         const curBaseSet = [...rez.baseSet];
         this.baseSet = [... curBaseSet];
         this.baseSet.unshift(this.selectedCurrency);
-        // this.last30Base = (this.curBase === 'EUR' ? 'AUD' : this.curBase);
       },
       error => console.log(error)
     );
   }
 
   onOptionSelected(): void {
-    console.log('onOptionSelected-selectedCurrency: ', this.selectedCurrency);
+    // console.log('onOptionSelected-selectedCurrency: ', this.selectedCurrency);
     this.curBase = this.selectedCurrency;
+    this.last30Base = (this.curBase === 'EUR' ? 'AUD' : this.curBase);
     this.api.getDataSets(this.curBase);
   }
 
   onClickChart( secCur: string ) {
+    this.api.getDataSets( secCur );
     this.api.createChartData( secCur );
   }
 

@@ -23,6 +23,6 @@ export interface Datum {
   // curBaseChartSet: any;   // chart for base for 30 days (see 'chartSet' for page 1)
 
   // page 3
-  topsBaseChartSet: any;  // top 5 to base chart set today-yesterday
+  // topsBaseChartSet: any;  // top 5 to base chart set today-yesterday (see 'initList' for page 1)
 
 }

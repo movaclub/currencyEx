@@ -46,8 +46,7 @@ select {
     appearance: auto;
     outline: 0;
     box-shadow: none;
-    background: cornsilk;
-    background-image: none;;
+    background: cornsilk none;;
     border: 1px solid darkgreen;
     border-radius: .25em;
 }
@@ -90,4 +89,9 @@ select {
 /* Transition */
 .select:hover::after {
     color: #f39c12;
+}
+.currency-chart {
+    width: 55vw;
+    height: inherit;
+    margin: auto;
 }
